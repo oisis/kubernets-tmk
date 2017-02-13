@@ -27,6 +27,6 @@ mkmf.log
 .tmp/
 .ansible*
 playbook.retry
-logs/*
 tmp/
 roles/example_role/
+logs/*
