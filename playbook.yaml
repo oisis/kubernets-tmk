@@ -4,3 +4,4 @@
     - "environments/{{ env }}/group_vars/main.yaml"
   roles:
     - base
+    - ntp
