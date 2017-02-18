@@ -1,1 +1,5 @@
 ---
+extra_packages_list:
+  - mc
+  - zsh
+  - telnet
