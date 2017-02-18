@@ -1,1 +1,4 @@
 ---
+packages_list:
+  - libselinux-python
+  - epel-release
