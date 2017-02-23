@@ -25,7 +25,6 @@ mkmf.log
 .vagrant
 .project
 .tmp/
-.ansible*
 playbook.retry
 tmp/
 roles/example_role/
