@@ -4,6 +4,7 @@
     name: '{{ item }}'
     state: present
   with_items: '{{ packages_list }}'
+  when: packages_list is defined
 
 - name: install extra packages
   yum:
