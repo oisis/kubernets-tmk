@@ -30,3 +30,4 @@ playbook.retry
 tmp/
 roles/example_role/
 logs/ansible.log
+.ansible/ansible_password
