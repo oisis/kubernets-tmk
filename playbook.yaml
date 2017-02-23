@@ -1,16 +1,22 @@
 ---
 - hosts: all
   tasks:
-    - include: "{{ item }}"
-      with_first_found:
-        - 'environments/{{ env }}/hosts_vars/{{ ansible_fqdn }}.yaml'
-        - 'environments/{{ env }}/hosts_vars/main.yaml'
-    - include: "{{ item }}"
-      with_first_found:
-        - 'environments/{{ env }}/hosts_secret_vars/{{ ansible_fqdn }}.yaml'
-        - 'environments/{{ env }}/hosts_secret_vars/main.yaml'
-  vars_files:
-    - 'environments/{{ env }}/group_vars/main.yaml'
+  - include_vars:
+      dir: 'environments/{{ env }}/group_vars/'
+      files_matching: '.*.yaml'
+  - include_vars:
+      dir: 'environments/{{ env }}/hosts_vars/'
+      files_matching: '{{ ansible_fqdn }}.yaml'
+  - include_vars:
+      dir: 'environments/{{ env }}/hosts_vars_secret/'
+      files_matching: '{{ ansible_fqdn }}.secret.yaml'
+    ignore_errors: true
   roles:
     - common
     - ntp
+
+- hosts: etcd
+  vars_files:
+    - 'environments/{{ env }}/group_vars/main.yaml'
+  roles:
+    - etcd
