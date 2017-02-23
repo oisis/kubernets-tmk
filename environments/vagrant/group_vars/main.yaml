@@ -3,3 +3,6 @@ extra_packages_list:
   - mc
   - zsh
   - telnet
+  - git
+
+group_vars_main: 'group vars main'
