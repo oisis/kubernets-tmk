@@ -31,8 +31,6 @@ cat > /etc/hosts <<EOF
 EOF
 SCRIPT
 
-
-
   (1..3).each do |i|
     config.vm.define "etcd#{i}" do |config|
       config.vm.hostname = "etcd#{i}.vagrant.loc"
@@ -43,7 +41,7 @@ SCRIPT
         ansible.playbook = "playbook.yaml"
         ansible.limit = "etcd#{i}.vagrant.loc"
         ansible.inventory_path = "environments/vagrant/inventory"
-        ansible.raw_arguments  = [ "--connection=paramiko", "-e env=vagrant" ]
+        ansible.raw_arguments  = [ "--connection=paramiko", "-e env=vagrant", "--vault-password-file=./.ansible/ansible_password" ]
       end
       config.vm.provider :virtualbox do |vb|
         vb.customize ["modifyvm", :id, "--memory", "256", "--cpus", 1, "--ioapic", "on", "--cpuexecutioncap", "50"]
@@ -62,7 +60,7 @@ SCRIPT
         ansible.playbook = "playbook.yaml"
         ansible.limit = "k8s#{i}.vagrant.loc"
         ansible.inventory_path = "environments/vagrant/inventory"
-        ansible.raw_arguments  = [ "--connection=paramiko", "-e env=vagrant"]
+        ansible.raw_arguments  = [ "--connection=paramiko", "-e env=vagrant", "--vault-password-file=./.ansible/ansible_password" ]
       end
       config.vm.provider :virtualbox do |vb|
         vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", 1, "--ioapic", "on", "--cpuexecutioncap", "50"]
@@ -80,7 +78,7 @@ SCRIPT
         ansible.playbook = "playbook.yaml"
         ansible.limit = "node1.vagrant.loc"
         ansible.inventory_path = "environments/vagrant/inventory"
-        ansible.raw_arguments  = [ "--connection=paramiko", "-e env=vagrant"]
+        ansible.raw_arguments  = [ "--connection=paramiko", "-e env=vagrant", "--vault-password-file=./.ansible/ansible_password" ]
       end
       config.vm.provider :virtualbox do |vb|
         vb.customize ["modifyvm", :id, "--memory", "1024", "--cpus", 1, "--ioapic", "on", "--cpuexecutioncap", "50"]
@@ -100,7 +98,7 @@ SCRIPT
       ansible.playbook = "playbook.yaml"
       ansible.limit = "lb.vagrant.loc"
       ansible.inventory_path = "environments/vagrant/inventory"
-      ansible.raw_arguments  = [ "--connection=paramiko", "-e env=vagrant"]
+      ansible.raw_arguments  = [ "--connection=paramiko", "-e env=vagrant", "--vault-password-file=./.ansible/ansible_password" ]
     end
     config.vm.provider :virtualbox do |vb|
       vb.customize ["modifyvm", :id, "--memory", "512", "--cpus", 1, "--ioapic", "on", "--cpuexecutioncap", "50"]
