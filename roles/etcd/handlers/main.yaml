@@ -1,0 +1,28 @@
+---
+- name: start etcd
+  service: name=etcd state=started
+
+- name: restart etcd
+  service: name=etcd state=restarted
+
+- name: reload etcd
+  service: name=etcd state=reloaded
+
+- name: stop etcd
+  service: name=etcd state=stopped
+
+- name: enable etcd
+  service: name=etcd enabled=yes
+
+- name: disable etcd
+  service: name=etcd enabled=no
+
+- name: wait for ETCd to come up
+  uri:
+    url: 'http://127.0.0.1:8080/version'
+    status_code: 200
+  register: result
+  until: result.status == 200
+  retries: 60
+  delay: 1
+  

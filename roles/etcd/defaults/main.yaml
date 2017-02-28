@@ -1,0 +1,3 @@
+---
+etcd_debug: true
+etcd_log_levels: "etcdserver=WARNING,security=DEBUG"

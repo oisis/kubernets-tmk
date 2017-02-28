@@ -1,0 +1,32 @@
+---
+- name: install the latest version of ETCd
+  yum:
+    name: 'etcd'
+    state: 'present'
+
+- name: Create ETCd configuration file
+  template:
+    src: 'etcd.conf.j2'
+    dest: '/etc/etcd/etcd.conf'
+    backup: yes
+
+- name: fix for systemd ETCd file
+  replace:
+    dest: '/lib/systemd/system/etcd.service'
+    regexp: '^Type=notify'
+    replace: 'Type=fork'
+
+- name: start and enable etcd service
+  service:
+    name: etcd
+    state: restarted
+    enabled: yes
+
+- name: wait for ETCd to come up
+  uri:
+    url: 'http://127.0.0.1:2380/version'
+    status_code: 200
+  register: result
+  until: result.status == 200
+  retries: 30
+  delay: 1

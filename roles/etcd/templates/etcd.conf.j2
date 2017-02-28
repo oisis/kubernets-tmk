@@ -1,0 +1,29 @@
+{% set all_etcd = [] %}
+{% for host in groups['etcd'] %}
+  {% set short_name = host.split('.')[0] %}
+  {% set _= all_etcd.append("%s=http://%s:2380" % (short_name, host)) %}
+{% endfor %}
+
+#
+# {{ ansible_managed }}
+#
+
+#[member]
+ETCD_NAME="{{ ansible_hostname }}"
+ETCD_DATA_DIR="/var/lib/etcd/{{ ansible_hostname }}.etcd"
+ETCD_LISTEN_PEER_URLS="http://0.0.0.0:2380,http://0.0.0.0:7001"
+ETCD_LISTEN_CLIENT_URLS="http://0.0.0.0:2379,http://0.0.0.0:4001"
+
+#[cluster]
+ETCD_INITIAL_ADVERTISE_PEER_URLS="http://{{ ansible_fqdn }}:2380"
+ETCD_INITIAL_CLUSTER="{{all_etcd|join(',')}}"
+ETCD_ADVERTISE_CLIENT_URLS="http://{{ ansible_fqdn }}:2379,http://{{ ansible_fqdn }}:4001"
+
+#[proxy]
+ETCD_PROXY="off"
+
+#[security]
+
+#[logging]
+ETCD_DEBUG="{{ etcd_debug }}"
+ETCD_LOG_PACKAGE_LEVELS="{{ etcd_log_levels }}"
