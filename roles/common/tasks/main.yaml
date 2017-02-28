@@ -14,8 +14,7 @@
   when: extra_packages_list is defined
 
 - name: turn on system log commpression
-  lineinfile:
+  replace:
     dest: '/etc/logrotate.conf'
     regexp: '^#compress'
-    insertafter: '^#compress'
-    line: 'compress'
+    replace: 'compress'
