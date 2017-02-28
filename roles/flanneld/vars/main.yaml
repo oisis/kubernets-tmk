@@ -1,0 +1,9 @@
+---
+flannel_etcd_host: "etcd1.vagrant.loc"
+flannel_etcd_port: "2379"
+flannel_etcd_key: "/cluster.local/network"
+flannel_interface: "eth1"
+flannel_ipmasq: "false"
+flannel_subnet_dir: "/run/flannel/networks"
+flannel_subnet_file: "/run/flannel/subnet.env"
+kubernetes_network: "10.1.0.0/16"

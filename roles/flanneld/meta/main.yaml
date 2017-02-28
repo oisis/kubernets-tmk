@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  author: OiSiS
+  description: An Ansible role for installing Flanneld.
+  company: none
+  license: GPL v2
+  min_ansible_version: 2.2
+  platforms:
+    - name: CentOS
+      versions:
+        - 7.1
+  categories:
+    - system
+    - vpn
+    - network
+
+dependencies:
+  - { role: "etcd" }

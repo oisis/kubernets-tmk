@@ -1,0 +1,5 @@
+---
+# Create ETCd key first
+- name: create etcd key
+  command: "etcdctl set /cluster.local/network/config \'{ \"Network\": \"{{ kubernetes_network }}\", \"Backend\": { \"Type\": \"vxlan\", \"VNI\": 1 }}\'"
+  delegate_to: "{{ flannel_etcd_host }}"

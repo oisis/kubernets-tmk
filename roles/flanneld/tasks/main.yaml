@@ -1,0 +1,14 @@
+---
+- name: install the latest version of Flanneld
+  yum:
+    name: 'flannel'
+    state: latest
+
+- include: etcd_key.yaml
+
+- name: create Flanneld configuration file
+  template:
+    src="flanneld.j2"
+    dest="/etc/sysconfig/flanneld"
+  notify:
+    - start flannel

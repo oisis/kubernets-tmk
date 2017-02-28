@@ -1,0 +1,12 @@
+---
+- name: start flannel
+  service: name=flanneld enabled=yes state=started
+
+- name: restart flannel
+  service: name=flanneld state=restarted
+
+- name: reload flannel
+  service: name=flanneld state=reloaded
+
+- name: stop flannel
+  service: name=flanneld state=stopped
