@@ -20,3 +20,13 @@
 - hosts: etcd
   roles:
     - etcd
+
+- hosts: k8s
+  roles:
+    - flanneld
+    - docker
+
+- hosts: node
+  roles:
+    - flanneld
+    - docker
