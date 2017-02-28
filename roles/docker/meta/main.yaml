@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  author: OiSiS
+  description: An Ansible role for installing Docker.
+  company: none
+  license: GPL v2
+  min_ansible_version: 2.2
+  platforms:
+    - name: CentOS
+      versions:
+        - 7.1
+  categories:
+    - system
+    - containers
+
+dependencies:
+  - { role: "etcd" }
