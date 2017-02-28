@@ -12,3 +12,10 @@
     state: present
   with_items: '{{ extra_packages_list }}'
   when: extra_packages_list is defined
+
+- name: turn on system log commpression
+  lineinfile:
+    dest: '/etc/logrotate.conf'
+    regexp: '^#compress'
+    insertafter: '^#compress'
+    line: 'compress'
