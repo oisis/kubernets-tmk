@@ -30,3 +30,5 @@ tmp/
 roles/example_role/
 logs/ansible.log
 .ansible/ansible_password
+.ansible/id_rsa
+.ansible/id_rsa.pub
