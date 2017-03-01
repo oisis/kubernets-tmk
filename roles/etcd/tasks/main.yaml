@@ -15,6 +15,7 @@
     dest: '/lib/systemd/system/etcd.service'
     regexp: '^Type=notify'
     replace: 'Type=fork'
+  when: ansible_bios_version == "VirtualBox"
 
 - name: start and enable etcd service
   service:
