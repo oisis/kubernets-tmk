@@ -72,7 +72,7 @@ SCRIPT
     config.vm.define "node#{i}" do |config|
       config.vm.hostname = "node#{i}.vagrant.loc"
       config.vm.provision "shell", inline: $fill_hosts
-      config.vm.network :private_network,ip: "192.168.0.#{i}"
+      config.vm.network :private_network,ip: "192.168.0.3#{i}"
       config.vm.provision :ansible do |ansible|
         ansible.verbose = "false"
         ansible.playbook = "playbook.yaml"
