@@ -13,5 +13,5 @@ galaxy_info:
     - system
     - containers
 
-dependencies:
-  - { role: "etcd" }
+# dependencies:
+#   - { role: "etcd" }

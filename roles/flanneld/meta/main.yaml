@@ -14,5 +14,5 @@ galaxy_info:
     - vpn
     - network
 
-dependencies:
-  - { role: "etcd" }
+# dependencies:
+#   - { role: "etcd" }
