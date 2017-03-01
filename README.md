@@ -9,16 +9,19 @@
 #### Check out repo
 ```git clone https://github.com/oisis/kubernets-tmk && cd ./kubernets-tmk```
 
-#### Run with Vagrant and VirtualBox
+#### Run Kubernetes cluster on your local machine with Vagrant and VirtualBox
+
 ```vagrant up etcd1 etcd2 etcd3 k8s1 k8s2 node1 node2```
 
 #### Setup your prod environment
+
 - Copy configuration
 
 ```cp -r environments/vagrant environments/prod```
 
 - Setup your environment
-Edit files inside directory environments/prod and setup proper values. The most important file is:
+
+  Edit files inside directory environments/prod and setup proper values. The most important file is:
 environments/prod/inventory - put proper IP addresses of your servers there.
 
 - Generate your ssh keys
@@ -33,6 +36,9 @@ environments/prod/inventory - put proper IP addresses of your servers there.
 
 ```ansible -i environments/vagrant/inventory etcd -u vagrant --key-file=./.ansible/id_rsa -m ping```
 
+- Run any command in ad-hoc mode - example: `whoami` on etcd hosts group
+
+```ansible -i environments/vagrant/inventory etcd -u vagrant --key-file=./.ansible/id_rsa -a "whoami"```
 
 #### Ansible-vault - secret variables management
 
