@@ -11,8 +11,8 @@ global
 {% endfor %}
 
 defaults
-  log global
-  mode  http
+  log     global
+  mode    http
   option  httplog
   option  dontlognull
   timeout connect 5000
@@ -34,10 +34,11 @@ listen stats :{{ haproxy_stats.port }}
 {% endif -%}
 
 {% for frontend in haproxy_frontends %}
-frontend {{ frontend.name }} {{ frontend.listen_address | default('0.0.0.0') }}:{{ frontend.port }}
+frontend {{ frontend.name }}
+  bind {{ frontend.listen_address | default('0.0.0.0') }}:{{ frontend.port }}
   maxconn {{ frontend.maxconn | default('1000') }}
   mode {{ frontend.mode | default('http') }}
-  default_beckend {{ frontend.name }}
+  default_backend {{ frontend.name }}
 
 {% endfor %}
 
