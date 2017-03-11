@@ -28,6 +28,7 @@ cat > /etc/hosts <<EOF
 192.168.0.22 k8s2.vagrant.loc k8s2
 192.168.0.31 node1.vagrant.loc node1
 192.168.0.32 node2.vagrant.loc node2
+192.168.0.100 lb.vagrant.loc lb
 EOF
 SCRIPT
 
@@ -93,6 +94,8 @@ SCRIPT
     config.vm.network :forwarded_port, guest: 1936, host: 1936
     config.vm.network :forwarded_port, guest: 2379, host: 2379
     config.vm.network :forwarded_port, guest: 4001, host: 4001
+    config.vm.network :forwarded_port, guest: 8080, host: 8080
+    config.vm.network :forwarded_port, guest: 6443, host: 6443
     config.vm.provision :ansible do |ansible|
       ansible.verbose = "false"
       ansible.playbook = "playbook.yaml"
