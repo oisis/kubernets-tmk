@@ -30,3 +30,7 @@
   roles:
     - flanneld
     - docker
+
+- hosts: lb
+  roles:
+    - haproxy
