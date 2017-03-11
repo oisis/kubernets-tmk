@@ -1,0 +1,77 @@
+---
+haproxy_rpm_list:
+  - haproxy
+
+haproxy_global_vars: []
+haproxy_defaults_vars: []
+
+haproxy_stats:
+  enabled: 'true'
+  url: '/'
+  port: 1936
+  username: 'admin'
+  password: 'admin'
+
+haproxy_frontends:
+  - name: 'etcd_4001'
+    port: 4001
+    mode: 'http'
+    listen_address: '0.0.0.0'
+    backends:
+      - 'etcd1.vagrant.loc'
+      - 'etcd2.vagrant.loc'
+      - 'etcd3.vagrant.loc'
+  - name: 'etcd_2379'
+    port: 2379
+    mode: 'http'
+    backends:
+      - 'etcd1.vagrant.loc'
+      - 'etcd2.vagrant.loc'
+      - 'etcd3.vagrant.loc'
+  - name: 'k8s_8080'
+    port: 8080
+    mode: 'http'
+    backends:
+      - 'k8s1.vagrant.loc'
+      - 'k8s2.vagrant.loc'
+  - name: 'k8s_6443'
+    port: 6443
+    mode: 'tcp'
+    backends:
+      - 'k8s1.vagrant.loc'
+      - 'k8s2.vagrant.loc'
+  - name: 'nodes_80'
+    port: 80
+    mode: 'http'
+    backends:
+      - 'node1.vagrant.loc'
+      - 'node2.vagrant.loc'
+
+haproxy_backends:
+  - name: 'etcd_4001'
+    port: 4001
+    hosts:
+      - 'etcd1.vagrant.loc'
+      - 'etcd2.vagrant.loc'
+      - 'etcd3.vagrant.loc'
+  - name: 'etcd_2379'
+    port: 2379
+    hosts:
+      - 'etcd1.vagrant.loc'
+      - 'etcd2.vagrant.loc'
+      - 'etcd3.vagrant.loc'
+  - name: 'k8s_8080'
+    port: 8080
+    hosts:
+      - 'k8s1.vagrant.loc'
+      - 'k8s2.vagrant.loc'
+  - name: 'k8s_6443'
+    port: 6443
+    hosts:
+      - 'k8s1.vagrant.loc'
+      - 'k8s2.vagrant.loc'
+  - name: 'nodes_80'
+    port: 80
+    hosts:
+      - 'node1.vagrant.loc'
+      - 'node2.vagrant.loc'
