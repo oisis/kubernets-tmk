@@ -37,7 +37,7 @@ listen stats :{{ haproxy_stats.port }}
 frontend {{ frontend.name }} {{ frontend.listen_address | default('0.0.0.0') }}:{{ frontend.port }}
   maxconn {{ frontend.maxconn | default('1000') }}
   mode {{ frontend.mode | default('http') }}
-  default_beckend {{ frontend.name }}_{{ frontend.port }}
+  default_beckend {{ frontend.name }}
 
 {% endfor %}
 
