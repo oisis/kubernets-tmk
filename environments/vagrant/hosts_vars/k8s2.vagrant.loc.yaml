@@ -6,12 +6,13 @@ k8s_ssl_support: true
 k8s_generate_ssl_certs: true
 
 k8s_apiserver:
+  - '--secure-port=6443'
   - '--admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota'
   - '--allow-privileged=true'
   - '--apiserver-count=2'
   - '--etcd-prefix=/cluster.local/network'
   - '--etcd-servers=http://lb.vagrant.loc:2379'
-  - '--insecure-bind-address=0.0.0.0'
+  - '--insecure-bind-address=127.0.0.1'
   - '--kubernetes-service-node-port=0'
   - '--max-connection-bytes-per-sec=0'
   - '--runtime-config=v1,extensions/v1beta1=true'
@@ -20,15 +21,21 @@ k8s_apiserver:
   - '--storage-backend=etcd2'
   - '--storage-media-type=application/json'
   - '--client-ca-file=/etc/kubernetes/certs/ca.pem'
+  - '--tls-ca-file=/etc/kubernetes/certs/ca.pem'
   - '--tls-cert-file=/etc/kubernetes/certs/apiserver.pem'
   - '--tls-private-key-file=/etc/kubernetes/certs/apiserver-key.pem'
   - '--service-account-key-file=/etc/kubernetes/certs/apiserver-key.pem'
+  - '--v=0'
 
 k8s_controller_manager:
   - '--address=0.0.0.0'
-  - '--master=https://lb.vagrant.loc:6443'
+  - '--master=http://127.0.0.1:8080'
   - '--service-account-private-key-file=/etc/kubernetes/certs/apiserver-key.pem'
   - '--root-ca-file=/etc/kubernetes/certs/ca.pem'
+  - '--cluster-signing-key-file=/etc/kubernetes/certs/ca-key.pem'
+  - '--cluster-signing-cert-file=/etc/kubernetes/certs/ca.pem'
+  - '--v=0'
 
 k8s_scheduler:
-  - '--master=https://lb.vagrant.loc:6443'
+  - '--master=http://127.0.0.1:8080'
+  - '--v=0'
