@@ -1,1 +1,36 @@
 ---
+- name: start kube-apiserver
+  service:
+    name: kube-apiserver
+    state: started
+    enabled: yes
+
+- name: start kube-controller-manager
+  service:
+    name: kube-controller-manager
+    state: started
+    enabled: yes
+
+- name: start kube-scheduler
+  service:
+    name: kube-scheduler
+    state: started
+    enabled: yes
+
+- name: restart kube-apiserver
+  service:
+    name: kube-apiserver
+    state: restarted
+    enabled: yes
+
+- name: restart kube-controller-manager
+  service:
+    name: kube-controller-manager
+    state: restarted
+    enabled: yes
+
+- name: restart kube-scheduler
+  service:
+    name: kube-scheduler
+    state: restarted
+    enabled: yes
