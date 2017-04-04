@@ -26,9 +26,9 @@ k8s_apiserver:
 
 k8s_controller_manager:
   - '--address=0.0.0.0'
-  - '--master=http://lb.vagrant.loc:8080'
+  - '--master=https://lb.vagrant.loc:6443'
   - '--service-account-private-key-file=/etc/kubernetes/certs/apiserver-key.pem'
   - '--root-ca-file=/etc/kubernetes/certs/ca.pem'
 
 k8s_scheduler:
-  - '--master=http://lb.vagrant.loc:8080'
+  - '--master=https://lb.vagrant.loc:6443'
