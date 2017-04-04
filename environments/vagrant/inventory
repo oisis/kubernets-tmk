@@ -5,17 +5,17 @@ ansible_ssh_user=vagrant
 ansible_ssh_pass=vagrant
 
 [etcd]
-etcd1.vagrant.loc ansible_host=192.168.0.11
-etcd2.vagrant.loc ansible_host=192.168.0.12
-etcd3.vagrant.loc ansible_host=192.168.0.13
+etcd1.vagrant.loc ansible_host=192.168.10.11
+etcd2.vagrant.loc ansible_host=192.168.10.12
+etcd3.vagrant.loc ansible_host=192.168.10.13
 
 [k8s]
-k8s1.vagrant.loc ansible_host=192.168.0.21
-k8s2.vagrant.loc ansible_host=192.168.0.22
+k8s1.vagrant.loc ansible_host=192.168.10.21
+k8s2.vagrant.loc ansible_host=192.168.10.22
 
 [node]
-node1.vagrant.loc ansible_host=192.168.0.31
-node2.vagrant.loc ansible_host=192.168.0.32
+node1.vagrant.loc ansible_host=192.168.10.31
+node2.vagrant.loc ansible_host=192.168.10.32
 
 [lb]
-lb.vagrant.loc ansible_host=192.168.0.100
+lb.vagrant.loc ansible_host=192.168.10.100
