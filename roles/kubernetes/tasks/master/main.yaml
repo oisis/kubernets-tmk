@@ -11,3 +11,5 @@
 
 - include: '{{ role_path }}/tasks/master/copy_ssl_certs.yaml'
   when: ( k8s_ssl_support and k8s_generate_ssl_certs and '{{ groups['k8s'][0] }}' not in inventory_hostname )
+
+- include: '{{ role_path }}/tasks/master/configure_k8s.yaml'

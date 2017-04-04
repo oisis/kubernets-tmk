@@ -1,0 +1,26 @@
+---
+- name: create Kubernetes configuration in place
+  template:
+    src: master_config.j2
+    dest: '/etc/kubernetes/config'
+    mode: 0644
+
+- name: create Kubernetes APIserver configuration in place
+  template:
+    src: master_apiserver.j2
+    dest: '/etc/kubernetes/apiserver'
+    mode: 0644
+  #   validate: haproxy -f %s -c -q
+  # notify: restart haproxy
+
+- name: create Kubernetes configuration in place
+  template:
+    src: master_controller-manager.j2
+    dest: '/etc/kubernetes/controller-manager'
+    mode: 0644
+
+- name: create Kubernetes configuration in place
+  template:
+    src: master_scheduler.j2
+    dest: '/etc/kubernetes/scheduler'
+    mode: 0644

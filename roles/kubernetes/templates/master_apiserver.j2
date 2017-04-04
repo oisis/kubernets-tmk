@@ -23,8 +23,4 @@ KUBE_SERVICE_ADDRESSES=""
 KUBE_ADMISSION_CONTROL=""
 
 # Add your own!
-KUBE_API_ARGS="
-{% for conf_opt in k8s_apiserver %}
-  {{ conf_opt }}
-{% endfor %}
-"
+KUBE_API_ARGS="{% for conf_opt in k8s_apiserver %} {{ conf_opt }}{% endfor %}"
