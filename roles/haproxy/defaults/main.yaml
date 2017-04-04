@@ -67,6 +67,7 @@ haproxy_backends:
       - 'k8s2.vagrant.loc'
   - name: 'k8s_6443'
     port: 6443
+    mode: 'tcp'
     hosts:
       - 'k8s1.vagrant.loc'
       - 'k8s2.vagrant.loc'
