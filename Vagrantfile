@@ -30,6 +30,14 @@ cat > /etc/hosts <<EOF
 192.168.10.32 node2.vagrant.loc node2
 192.168.10.100 lb.vagrant.loc lb
 EOF
+mkdir -p /home/vagrant/.ssh && chmod 0700 /home/vagrant/.ssh
+VAGRANT_SSH_KEY=`grep vagrant /home/vagrant/.ssh/authorized_keys`
+echo $VAGRANT_SSH_KEY > /home/vagrant/.ssh/authorized_keys.org
+cat /home/vagrant/.ssh/authorized_keys.org > /home/vagrant/.ssh/authorized_keys
+cat /vagrant/.ansible/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
+rm -f /home/vagrant/.ssh/authorized_keys.org
+/bin/cp /vagrant/.ansible/id* /home/vagrant/.ssh/
+chown -R vagrant:vagrant /home/vagrant/.ssh/
 SCRIPT
 
   (1..3).each do |i|
