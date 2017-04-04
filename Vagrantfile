@@ -21,14 +21,14 @@ $fill_hosts = <<SCRIPT
 cat > /etc/hosts <<EOF
 127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1       localhost localhost.localdomain localhost6 localhost6.localdomain6
-192.168.0.11 etcd1.vagrant.loc etcd1
-192.168.0.12 etcd2.vagrant.loc etcd2
-192.168.0.13 etcd3.vagrant.loc etcd3
-192.168.0.21 k8s1.vagrant.loc k8s1
-192.168.0.22 k8s2.vagrant.loc k8s2
-192.168.0.31 node1.vagrant.loc node1
-192.168.0.32 node2.vagrant.loc node2
-192.168.0.100 lb.vagrant.loc lb
+192.168.10.11 etcd1.vagrant.loc etcd1
+192.168.10.12 etcd2.vagrant.loc etcd2
+192.168.10.13 etcd3.vagrant.loc etcd3
+192.168.10.21 k8s1.vagrant.loc k8s1
+192.168.10.22 k8s2.vagrant.loc k8s2
+192.168.10.31 node1.vagrant.loc node1
+192.168.10.32 node2.vagrant.loc node2
+192.168.10.100 lb.vagrant.loc lb
 EOF
 SCRIPT
 
@@ -36,7 +36,7 @@ SCRIPT
     config.vm.define "etcd#{i}" do |config|
       config.vm.hostname = "etcd#{i}.vagrant.loc"
       config.vm.provision "shell", inline: $fill_hosts
-      config.vm.network :private_network,ip: "192.168.0.1#{i}"
+      config.vm.network :private_network,ip: "192.168.10.1#{i}"
       config.vm.provision :ansible do |ansible|
         ansible.verbose = "false"
         ansible.playbook = "playbook.yaml"
@@ -54,7 +54,7 @@ SCRIPT
     config.vm.define "k8s#{i}" do |config|
       config.vm.hostname = "k8s#{i}.vagrant.loc"
       config.vm.provision "shell", inline: $fill_hosts
-      config.vm.network :private_network,ip: "192.168.0.2#{i}"
+      config.vm.network :private_network,ip: "192.168.10.2#{i}"
       config.vm.network :forwarded_port, guest: "8080", host: "808#{i}"
       config.vm.provision :ansible do |ansible|
         ansible.verbose = "false"
@@ -73,7 +73,7 @@ SCRIPT
     config.vm.define "node#{i}" do |config|
       config.vm.hostname = "node#{i}.vagrant.loc"
       config.vm.provision "shell", inline: $fill_hosts
-      config.vm.network :private_network,ip: "192.168.0.3#{i}"
+      config.vm.network :private_network,ip: "192.168.10.3#{i}"
       config.vm.provision :ansible do |ansible|
         ansible.verbose = "false"
         ansible.playbook = "playbook.yaml"
@@ -90,7 +90,7 @@ SCRIPT
   config.vm.define "lb" do |config|
     config.vm.hostname = "lb.vagrant.loc"
     config.vm.provision "shell", inline: $fill_hosts
-    config.vm.network :private_network,ip: "192.168.0.100"
+    config.vm.network :private_network,ip: "192.168.10.100"
     config.vm.network :forwarded_port, guest: 1936, host: 1936
     config.vm.network :forwarded_port, guest: 2379, host: 2379
     config.vm.network :forwarded_port, guest: 4001, host: 4001
