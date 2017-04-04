@@ -1,0 +1,12 @@
+---
+- name: create SSL certs directory
+  file:
+    path: /etc/kubernetes/certs
+    state: directory
+    mode: 0755
+
+- name: copy SSL certs from {{ groups['k8s'][0] }}
+  synchronize:
+    src: '{{ k8s_certs_directory }}'
+    dest: '/etc/kubernetes'
+  delegate_to: "{{ groups['k8s'][0] }}"

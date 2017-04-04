@@ -5,3 +5,9 @@
     state: present
   with_items: '{{ k8s_master_rpms_list }}'
   when: k8s_master_rpms_list is defined
+
+- include: '{{ role_path }}/tasks/master/generate_ssl_certs.yaml'
+  when: ( k8s_ssl_support and k8s_generate_ssl_certs and '{{ groups['k8s'][0] }}' in inventory_hostname )
+
+- include: '{{ role_path }}/tasks/master/copy_ssl_certs.yaml'
+  when: ( k8s_ssl_support and k8s_generate_ssl_certs and '{{ groups['k8s'][0] }}' not in inventory_hostname )

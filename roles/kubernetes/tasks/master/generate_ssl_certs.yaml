@@ -1,0 +1,43 @@
+---
+- name: create SSL certs directory
+  file:
+    path: /etc/kubernetes/certs
+    state: directory
+    mode: 0755
+
+- name: create a certificate authority (CA) key
+  shell: 'openssl genrsa -out {{ k8s_certs_directory }}/ca-key.pem 2048'
+
+- name: generate a certificate for Kubernetes
+  shell: 'openssl req -x509 -new -nodes -key {{ k8s_certs_directory }}/ca-key.pem -days 10000 -out {{ k8s_certs_directory }}/ca.pem -subj "/CN=kube-ca"'
+
+- name: create a server key
+  shell: 'openssl genrsa -out {{ k8s_certs_directory }}/apiserver-key.pem 2048'
+
+- name: deploy openssl configuration file for k8s master
+  template:
+    src: 'openssl.cnf.j2'
+    dest: '{{ k8s_certs_directory }}/openssl.cnf'
+    owner: '{{ ansible_env.USER }}'
+    mode: 0644
+
+- name: generate a certificate signing request(CSR) for a server certificate
+  shell: 'openssl req -new -key {{ k8s_certs_directory }}/apiserver-key.pem -out {{ k8s_certs_directory }}/apiserver.csr -subj "/CN=kube-apiserver" -config {{ k8s_certs_directory }}/openssl.cnf'
+
+- name: generate the server certificate and sign it
+  shell: 'openssl x509 -req -in {{ k8s_certs_directory }}/apiserver.csr -CA {{ k8s_certs_directory }}/ca.pem -CAkey {{ k8s_certs_directory }}/ca-key.pem -CAcreateserial -out {{ k8s_certs_directory }}/apiserver.pem -days 365 -extensions v3_req -extfile {{ k8s_certs_directory }}/openssl.cnf'
+
+- name: deploy openssl configuration file for k8s nodes
+  template:
+    src: 'node-openssl.cnf.j2'
+    dest: '{{ k8s_certs_directory }}/node-openssl.cnf'
+    owner: '{{ ansible_env.USER }}'
+    mode: 0644
+
+- name: generate certificate for eatch node
+  shell: 'openssl req -newkey rsa:2048 -nodes -keyout {{ k8s_certs_directory }}/{{ item }}.key -subj "/CN={{ item }}" -out {{ k8s_certs_directory }}/{{ item }}.csr'
+  with_items: '{{ k8s_nodes }}'
+
+- name: sign in nodes certificates
+  shell: 'openssl x509 -req -days 10000 -in {{ k8s_certs_directory }}/{{ item }}.csr -CA {{ k8s_certs_directory }}/ca.pem -CAkey {{ k8s_certs_directory }}/ca-key.pem -CAcreateserial -out {{ k8s_certs_directory }}/{{ item }}.crt'
+  with_items: '{{ k8s_nodes }}'
