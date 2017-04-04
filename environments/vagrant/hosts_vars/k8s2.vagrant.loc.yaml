@@ -1,0 +1,34 @@
+---
+kubernetes_role: 'master'
+etcd_cluster_address: 'lb.vagrant.loc'
+k8s_master_cluster: 'lb.vagrant.loc'
+k8s_ssl_support: true
+k8s_generate_ssl_certs: true
+
+k8s_apiserver:
+  - '--admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota'
+  - '--allow-privileged=true'
+  - '--apiserver-count=2'
+  - '--etcd-prefix=/cluster.local/network'
+  - '--etcd-servers=http://lb.vagrant.loc:2379'
+  - '--insecure-bind-address=0.0.0.0'
+  - '--kubernetes-service-node-port=0'
+  - '--max-connection-bytes-per-sec=0'
+  - '--runtime-config=v1,extensions/v1beta1=true'
+  - '--service-cluster-ip-range=10.1.0.0/16'
+  - '--storage-versions=authentication.k8s.io/v1beta1,authorization.k8s.io/v1beta1,autoscaling/v1,batch/v1,certificates.k8s.io/v1alpha1,componentconfig/v1alpha1,extensions/v1beta1,imagepolicy.k8s.io/v1alpha1,rbac.authorization.k8s.io/v1alpha1,storage.k8s.io/v1beta1,v1'
+  - '--storage-backend=etcd2'
+  - '--storage-media-type=application/json'
+  - '--client-ca-file=/etc/kubernetes/certs/ca.pem'
+  - '--tls-cert-file=/etc/kubernetes/certs/apiserver.pem'
+  - '--tls-private-key-file=/etc/kubernetes/certs/apiserver-key.pem'
+  - '--service-account-key-file=/etc/kubernetes/certs/apiserver-key.pem'
+
+k8s_controller_manager:
+  - '--address=0.0.0.0'
+  - '--master=http://lb.vagrant.loc:8080'
+  - '--service-account-private-key-file=/etc/kubernetes/certs/apiserver-key.pem'
+  - '--root-ca-file=/etc/kubernetes/certs/ca.pem'
+
+k8s_scheduler:
+  - '--master=http://lb.vagrant.loc:8080'
