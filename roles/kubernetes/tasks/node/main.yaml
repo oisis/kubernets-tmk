@@ -1,0 +1,7 @@
+---
+- name: install kubernetes node packages
+  yum:
+    name: '{{ item }}'
+    state: present
+  with_items: '{{ k8s_node_rpms_list }}'
+  when: k8s_node_rpms_list is defined

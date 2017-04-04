@@ -25,11 +25,13 @@
   roles:
     - flanneld
     - docker
+    - kubernetes
 
 - hosts: node
   roles:
     - flanneld
     - docker
+    - kubernetes
 
 - hosts: lb
   roles:

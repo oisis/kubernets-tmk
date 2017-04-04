@@ -1,0 +1,6 @@
+---
+- include: '{{ role_path }}/tasks/master/main.yaml'
+  when: kubernetes_role == 'master'
+
+- include: '{{ role_path }}/tasks/node/main.yaml'
+  when: kubernetes_role == 'node'

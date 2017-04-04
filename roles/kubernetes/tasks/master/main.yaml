@@ -1,0 +1,7 @@
+---
+- name: install kubernetes master packages
+  yum:
+    name: '{{ item }}'
+    state: present
+  with_items: '{{ k8s_master_rpms_list }}'
+  when: k8s_master_rpms_list is defined
