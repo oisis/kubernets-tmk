@@ -45,6 +45,7 @@ k8s_apiserver:
   - '--storage-backend=etcd2'
   - '--storage-media-type=application/json'
   - '--storage-versions=authentication.k8s.io/v1beta1,authorization.k8s.io/v1beta1,autoscaling/v1,batch/v1,certificates.k8s.io/v1alpha1,componentconfig/v1alpha1,extensions/v1beta1,imagepolicy.k8s.io/v1alpha1,rbac.authorization.k8s.io/v1alpha1,storage.k8s.io/v1beta1,v1'
+  - '--v=3'
 
 # Kubernetes controller-manager settings:
 k8s_controller_manager:
@@ -54,8 +55,9 @@ k8s_controller_manager:
   - '--service-account-private-key-file={{ k8s_certs_directory }}/server.key'
   - '--node-monitor-grace-period=20s'
   - '--pod-eviction-timeout=20s'
+  - '--v=3'
 
 # Kubernetes scheduler settings:
 k8s_scheduler:
   - '--master=http://127.0.0.1:8080'
-  - '--v=0'
+  - '--v=3'
