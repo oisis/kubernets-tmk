@@ -4,6 +4,7 @@ kubernetes_role: 'node'
 k8s_ssl_support: true
 k8s_generate_ssl_certs: true
 k8s_certs_directory: '/etc/kubernetes/certs'
+k8s_tokens_directory: '/etc/kubernetes/tokens'
 k8s_loadbalancer_domain: 'lb.vagrant.loc'
 k8s_loadbalancer_ip: '192.168.10.100'
 k8s_service_ip: '10.1.0.1'
@@ -25,3 +26,36 @@ k8s_master_rpms_list:
 # RPMs list
 k8s_node_rpms_list:
   - kubernetes-node
+
+# Kubernetes APIServer settings:
+k8s_apiserver:
+  - '--secure-port=6443'
+  - '--insecure-bind-address=127.0.0.1'
+  - '--kubelet-https=true'
+  - '--client-ca-file={{ k8s_certs_directory }}/ca.crt'
+  - '--tls-cert-file={{ k8s_certs_directory }}/server.crt'
+  - '--tls-private-key-file={{ k8s_certs_directory }}/server.key'
+  - '--token_auth_file={{ k8s_tokens_directory }}/known_tokens.csv'
+  - '--etcd-prefix=/cluster.local/network'
+  - '--etcd-servers=http://lb.vagrant.loc:2379'
+  - '--service-cluster-ip-range=10.1.0.0/16'
+  - '--allow-privileged=true'
+  - '--apiserver-count=2'
+  - '--admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota'
+  - '--storage-backend=etcd2'
+  - '--storage-media-type=application/json'
+  - '--storage-versions=authentication.k8s.io/v1beta1,authorization.k8s.io/v1beta1,autoscaling/v1,batch/v1,certificates.k8s.io/v1alpha1,componentconfig/v1alpha1,extensions/v1beta1,imagepolicy.k8s.io/v1alpha1,rbac.authorization.k8s.io/v1alpha1,storage.k8s.io/v1beta1,v1'
+
+# Kubernetes controller-manager settings:
+k8s_controller_manager:
+  - '--address=0.0.0.0'
+  - '--master=http://127.0.0.1:8080'
+  - '--root-ca-file={{ k8s_certs_directory }}/ca.crt'
+  - '--service-account-private-key-file={{ k8s_certs_directory }}/server.key'
+  - '--node-monitor-grace-period=20s'
+  - '--pod-eviction-timeout=20s'
+
+# Kubernetes scheduler settings:
+k8s_scheduler:
+  - '--master=http://127.0.0.1:8080'
+  - '--v=0'
