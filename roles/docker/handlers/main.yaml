@@ -8,6 +8,7 @@
 - name: restart docker
   service:
     name: docker
+    enabled: yes
     state: restarted
 
 - name: reload docker
