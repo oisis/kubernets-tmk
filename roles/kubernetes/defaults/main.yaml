@@ -13,9 +13,6 @@ k8s_nodes:
   - node1.vagrant.loc
   - node2.vagrant.loc
 
-###
-# Kubernetes master
-###
 # RPMs list
 k8s_master_rpms_list:
   - kubernetes-master
@@ -23,11 +20,6 @@ k8s_master_rpms_list:
   - cockpit
   - cockpit-docker
   - cockpit-kubernetes
-
-###
-# Kubernetes node
-###
-# RPMs list
 k8s_node_rpms_list:
   - kubernetes-node
   - cockpit

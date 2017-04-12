@@ -1,0 +1,52 @@
+---
+- name: create SSL certs directory
+  file:
+    path: '{{ k8s_kubeconfig_directory }}'
+    state: directory
+    mode: 0755
+
+- name: copy kube/config as kubelet config
+  copy:
+    src: '{{ ansible_env.HOME }}/.kube/config'
+    dest: '{{ k8s_kubeconfig_directory }}/kubelet.config'
+    owner: '{{ ansible_env.USER }}'
+    mode: 0644
+    remote_src: true
+
+- name: copy kube/config as proxy config
+  copy:
+    src: '{{ ansible_env.HOME }}/.kube/config'
+    dest: '{{ k8s_kubeconfig_directory }}/proxy.config'
+    owner: '{{ ansible_env.USER }}'
+    mode: 0644
+    remote_src: true
+
+- name: create Kubernetes configuration in place
+  template:
+    src: master_config.j2
+    dest: '/etc/kubernetes/config'
+    mode: 0644
+
+- name: create Kubernetes kubelet configuration in place
+  template:
+    src: node_kubelet.j2
+    dest: '/etc/kubernetes/kubelet'
+    mode: 0644
+
+- name: create Kubernetes proxy configuration in place
+  template:
+    src: node_proxy.j2
+    dest: '/etc/kubernetes/proxy'
+    mode: 0644
+
+- name: restart kubelet
+  service:
+    name: kubelet
+    state: restarted
+    enabled: yes
+
+- name: restart kube-proxy
+  service:
+    name: kube-proxy
+    state: restarted
+    enabled: yes

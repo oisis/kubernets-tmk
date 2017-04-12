@@ -1,0 +1,36 @@
+---
+- name: create SSL certs directory
+  file:
+    path: '{{ k8s_certs_directory }}'
+    state: directory
+    mode: 0755
+
+- name: create tokens directory
+  file:
+    path: '{{ k8s_tokens_directory }}'
+    state: directory
+    mode: 0755
+
+- name: copy ca.crt from {{ groups['k8s'][0] }}
+  synchronize:
+    src: '{{ k8s_certs_directory }}/ca.crt'
+    dest: '{{ k8s_certs_directory }}'
+  delegate_to: "{{ groups['k8s'][0] }}"
+
+- name: copy host cert from {{ groups['k8s'][0] }}
+  synchronize:
+    src: '{{ k8s_certs_directory }}/{{ ansible_fqdn }}.crt'
+    dest: '{{ k8s_certs_directory }}'
+  delegate_to: "{{ groups['k8s'][0] }}"
+
+- name: copy host key from {{ groups['k8s'][0] }}
+  synchronize:
+    src: '{{ k8s_certs_directory }}/{{ ansible_fqdn }}.key'
+    dest: '{{ k8s_certs_directory }}'
+  delegate_to: "{{ groups['k8s'][0] }}"
+
+- name: copy token file from {{ groups['k8s'][0] }}
+  synchronize:
+    src: '{{ k8s_tokens_directory }}/known_tokens.csv'
+    dest: '{{ k8s_tokens_directory }}'
+  delegate_to: "{{ groups['k8s'][0] }}"
