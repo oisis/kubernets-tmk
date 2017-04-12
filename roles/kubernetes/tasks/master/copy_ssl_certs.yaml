@@ -1,7 +1,7 @@
 ---
 - name: create SSL certs directory
   file:
-    path: /etc/kubernetes/certs
+    path: '{{ k8s_certs_directory }}'
     state: directory
     mode: 0755
 
