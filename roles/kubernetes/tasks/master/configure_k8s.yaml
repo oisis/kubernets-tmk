@@ -11,29 +11,29 @@
     dest: '/etc/kubernetes/apiserver'
     mode: 0644
 
-- name: restart kube-apiserver
-  service:
-    name: kube-apiserver
-    state: restarted
-    enabled: yes
-
 - name: create Kubernetes configuration in place
   template:
     src: master_controller-manager.j2
     dest: '/etc/kubernetes/controller-manager'
     mode: 0644
 
-- name: restart kube-controller-manager
-  service:
-    name: kube-controller-manager
-    state: restarted
-    enabled: yes
-
 - name: create Kubernetes configuration in place
   template:
     src: master_scheduler.j2
     dest: '/etc/kubernetes/scheduler'
     mode: 0644
+
+- name: restart kube-apiserver
+  service:
+    name: kube-apiserver
+    state: restarted
+    enabled: yes
+
+- name: restart kube-controller-manager
+  service:
+    name: kube-controller-manager
+    state: restarted
+    enabled: yes
 
 - name: restart kube-scheduler
   service:
