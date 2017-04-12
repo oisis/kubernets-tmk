@@ -5,3 +5,11 @@
     state: present
   with_items: '{{ k8s_node_rpms_list }}'
   when: k8s_node_rpms_list is defined
+
+- include: '{{ role_path }}/tasks/node/copy_ssl_certs.yaml'
+  when: k8s_ssl_support
+
+- include: '{{ role_path }}/tasks/node/generate_kubeconfig.yaml'
+  when: k8s_ssl_support
+
+- include: '{{ role_path }}/tasks/node/configure_k8s.yaml'
