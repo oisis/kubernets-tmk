@@ -20,6 +20,9 @@ k8s_nodes:
 k8s_master_rpms_list:
   - kubernetes-master
   - openssl
+  - cockpit
+  - cockpit-docker
+  - cockpit-kubernetes
 
 ###
 # Kubernetes node
@@ -27,6 +30,9 @@ k8s_master_rpms_list:
 # RPMs list
 k8s_node_rpms_list:
   - kubernetes-node
+  - cockpit
+  - cockpit-docker
+  - cockpit-kubernetes
 
 # Kubernetes APIServer settings:
 k8s_apiserver:
