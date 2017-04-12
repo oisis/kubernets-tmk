@@ -1,43 +1,46 @@
 ---
 - name: create SSL certs directory
   file:
-    path: /etc/kubernetes/certs
+    path: '{{ k8s_certs_directory }}'
+    state: directory
+    mode: 0755
+
+- name: create tokens directory
+  file:
+    path: '{{ k8s_tokens_directory }}'
     state: directory
     mode: 0755
 
 - name: create a certificate authority (CA) key
-  shell: 'openssl genrsa -out {{ k8s_certs_directory }}/ca-key.pem 2048'
+  shell: 'openssl genrsa -out {{ k8s_certs_directory }}/ca.key 4096'
 
 - name: generate a certificate for Kubernetes
-  shell: 'openssl req -x509 -new -nodes -key {{ k8s_certs_directory }}/ca-key.pem -days 10000 -out {{ k8s_certs_directory }}/ca.pem -subj "/CN=kube-ca"'
+  shell: 'openssl req -x509 -new -nodes -key {{ k8s_certs_directory }}/ca.key -subj "/CN={{ k8s_loadbalancer_domain }}" -days 10000 -out {{ k8s_certs_directory }}/ca.crt'
 
 - name: create a server key
-  shell: 'openssl genrsa -out {{ k8s_certs_directory }}/apiserver-key.pem 2048'
+  shell: 'openssl genrsa -out {{ k8s_certs_directory }}/server.key 2048'
 
-- name: deploy openssl configuration file for k8s master
-  template:
-    src: 'openssl.cnf.j2'
-    dest: '{{ k8s_certs_directory }}/openssl.cnf'
-    owner: '{{ ansible_env.USER }}'
-    mode: 0644
-
-- name: generate a certificate signing request(CSR) for a server certificate
-  shell: 'openssl req -new -key {{ k8s_certs_directory }}/apiserver-key.pem -out {{ k8s_certs_directory }}/apiserver.csr -subj "/CN=kube-apiserver" -config {{ k8s_certs_directory }}/openssl.cnf'
+- name: generate a certificate signing request for a server certificate
+  shell: 'openssl req -new -key {{ k8s_certs_directory }}/server.key -subj "/CN={{ k8s_loadbalancer_domain }}" -out {{ k8s_certs_directory }}/server.csr'
 
 - name: generate the server certificate and sign it
-  shell: 'openssl x509 -req -in {{ k8s_certs_directory }}/apiserver.csr -CA {{ k8s_certs_directory }}/ca.pem -CAkey {{ k8s_certs_directory }}/ca-key.pem -CAcreateserial -out {{ k8s_certs_directory }}/apiserver.pem -days 365 -extensions v3_req -extfile {{ k8s_certs_directory }}/openssl.cnf'
+  shell: 'openssl x509 -req -in {{ k8s_certs_directory }}/server.csr -CA {{ k8s_certs_directory }}/ca.crt -CAkey {{ k8s_certs_directory }}/ca.key -CAcreateserial -out {{ k8s_certs_directory }}/server.crt -days 10000'
 
-- name: deploy openssl configuration file for k8s nodes
+- name: generate random TOKEN
+  shell: 'dd if=/dev/urandom bs=128 count=1 2>/dev/null | base64 | tr -d "=+/" | dd bs=32 count=1 2>/dev/null'
+  register: apiserver_token
+
+- name: deploy file with auth tokens
   template:
-    src: 'node-openssl.cnf.j2'
-    dest: '{{ k8s_certs_directory }}/node-openssl.cnf'
+    src: 'known_tokens.csv.j2'
+    dest: '{{ k8s_tokens_directory }}/known_tokens.csv'
     owner: '{{ ansible_env.USER }}'
     mode: 0644
 
-- name: generate certificate for eatch node
+- name: generate a certificate signing request for a nodes certificates
   shell: 'openssl req -newkey rsa:2048 -nodes -keyout {{ k8s_certs_directory }}/{{ item }}.key -subj "/CN={{ item }}" -out {{ k8s_certs_directory }}/{{ item }}.csr'
-  with_items: '{{ k8s_nodes }}'
+  with_items: '{{ groups["node"] }}'
 
-- name: sign in nodes certificates
-  shell: 'openssl x509 -req -days 10000 -in {{ k8s_certs_directory }}/{{ item }}.csr -CA {{ k8s_certs_directory }}/ca.pem -CAkey {{ k8s_certs_directory }}/ca-key.pem -CAcreateserial -out {{ k8s_certs_directory }}/{{ item }}.crt'
-  with_items: '{{ k8s_nodes }}'
+- name: generate a client certificate for a nodes certificates
+  shell: 'openssl x509 -req -days 10000 -in {{ k8s_certs_directory }}/{{ item }}.csr -CA {{ k8s_certs_directory }}/ca.crt -CAkey {{ k8s_certs_directory }}/ca.key -CAcreateserial -out {{ k8s_certs_directory }}/{{ item }}.crt'
+  with_items: '{{ groups["node"] }}'
